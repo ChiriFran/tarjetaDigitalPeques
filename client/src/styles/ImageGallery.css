@@ -1,0 +1,23 @@
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 10px 0;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.gallery-image {
+    flex: 1 1 calc(33.33% - 6.66px);
+    max-width: calc(33.33% - 6.66px);
+    height: auto;
+    object-fit: cover;
+}
+
+/* Media query para pantallas de 768px o menos (tablets y móviles) */
+@media (max-width: 768px) {
+    .gallery-image {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}

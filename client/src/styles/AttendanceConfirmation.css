@@ -1,0 +1,110 @@
+.attendanceConfirmationContainer {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: #2e2e2e;
+}
+
+.icono-superior {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.attendanceConfirmationContainer h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #eee;
+    padding: 1rem 0;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #eee;
+    font-family: Arial, sans-serif;
+}
+
+.label-cantidad {
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #2e2e2e;
+}
+
+.select-cantidad {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 2rem;
+    font-size: 16px;
+}
+
+.tarjeta-persona {
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.tarjeta-persona h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #2e2e2e;
+}
+
+.tarjeta-persona input,
+.tarjeta-persona select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #2e2e2e;
+}
+
+.boton-enviar {
+    width: 100%;
+    padding: 12px;
+    background-color: #2e2e2e;
+    color: #F8F4F0;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.boton-enviar:hover {
+    transition: .6s;
+    text-decoration: underline;
+}
+
+.boton-enviar:disabled {
+    background-color: #999;
+    /* gris claro */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.boton-enviar:disabled:hover {
+    text-decoration: none;
+}
+
+.restriccionAlimentariaTitle{
+    color: #454545;
+}
+
+@media (max-width: 480px) {
+    .attendanceConfirmationContainer h2 {
+        font-size: 1.4rem;
+        padding: 0 1rem;
+    }
+
+    .label-cantidad {
+        font-size: 1rem;
+    }
+
+    .form-container {
+        margin: 30px 15px;
+    }
+}

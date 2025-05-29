@@ -1,0 +1,35 @@
+.footerContainer {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 4rem 0;
+}
+
+.footerMessage {
+    font-size: 1.6rem;
+    color: #F8F4F0;
+    font-weight: 400;
+}
+
+.footerName {
+    font-size: 1.6rem;
+    color: #F8F4F0;
+    font-weight: 400;
+    margin-top: 3rem;
+    width: 100%;
+    text-align: end;
+    padding: 0 2rem;
+}
+
+@media screen and (max-width: 768px) {
+    .footerMessage {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .footerName {
+        font-size: 1.4rem;
+    }
+}

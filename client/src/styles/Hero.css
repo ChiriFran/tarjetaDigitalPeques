@@ -1,0 +1,50 @@
+.heroContainer {
+    width: 100%;
+    height: 80vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Capa con imagen de fondo */
+.heroMask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../media/hero/hero-desktop.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+    z-index: 0;
+}
+
+/* Texto en la esquina inferior derecha */
+.heroNames {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    z-index: 2;
+    /* importante: encima de la máscara */
+    font-size: 1.8rem;
+    color: var(--detail-color);
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+/* Imagen para mobile */
+@media (max-width: 768px) {
+    .heroMask {
+        background-image: url('../../media/hero/hero-mobile.jpg');
+    }
+
+    /* Texto en la esquina inferior derecha */
+    .heroNames {
+        bottom: 5px;
+        right: 5px;
+        font-size: 1.2rem;
+    }
+}
