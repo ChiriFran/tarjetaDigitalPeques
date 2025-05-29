@@ -1,7 +1,7 @@
 import './App.css';
 import { useRef } from 'react';
 import PasswordOverlay from './components/PasswordOverlay';
-import Hero from './components/Hero';
+import HeroBackgroundDesing from './components/HeroBackgroundDesing';
 import Countdown from './components/Countdown';
 import IntroMessage from './components/IntroMessage';
 import ImageGallery from './components/ImageGallery';
@@ -29,7 +29,7 @@ function App() {
     <>
       <PasswordOverlay musicRef={musicRef} />
 
-      <FadeInSection><Hero /></FadeInSection>
+      <FadeInSection><HeroBackgroundDesing /></FadeInSection>
       <FadeInSection><Countdown targetDate="2025-09-10T17:00:00" /></FadeInSection>
       <FadeInSection><IntroMessage mensaje="El camino es más divertido si lo recorremos juntos" /></FadeInSection>      <FadeInSection><ImageGallery images={gallerySet1} /></FadeInSection>
       <FadeInSection><EventInfo /></FadeInSection>
