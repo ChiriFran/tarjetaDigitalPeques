@@ -1,46 +1,154 @@
 .heroBackgroundDesingContainer {
     width: 100%;
-    height: 100vh;
+    height: 100svh;
     position: relative;
     overflow: hidden;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-/* Capa con imagen de fondo */
+/* Fondo */
 .heroBackgroundDesingMask {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('../../media/hero/corazon-pink-desktop.png');
+    background-image: url('../../media/hero/hero-desktop.png');
     background-repeat: no-repeat;
-    background-position: top;
+    background-position: center;
     background-size: cover;
+    z-index: 0;
 }
 
-/* Texto en la esquina inferior derecha */
-.heroBackgroundDesingNames {
-    position: absolute;
-    bottom: 20px;
-    right: 30px;
+/* Contenedor general para centrar la imagen */
+.heroCenterImageWrapper {
+    width: 60%;
+    height: 100%;
     z-index: 2;
-    /* importante: encima de la máscara */
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Marco de la imagen (donde se aplican decorativos) */
+.heroImageFrame {
+    position: relative;
+    width: 30%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 8px solid #e29667;
+    margin-top: 10%;
+}
+
+/* Decorativos en esquinas */
+.heroImageFrame::before,
+.heroImageFrame::after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 0;
+}
+
+/* Esquina superior izquierda */
+.heroImageFrame::before {
+    background-image: url('../../media/hero/corazones.png');
+    top: -15%;
+    left: -30%;
+    rotate: 25deg;
+}
+
+/* Esquina superior derecha */
+.heroImageFrame::after {
+    background-image: url('../../media/hero/corazones.png');
+    bottom: -15%;
+    right: -30%;
+    rotate: 25deg;
+
+}
+
+/* Imagen adaptada al marco */
+.heroCenterImage {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Texto en esquina inferior */
+.heroBackgroundDesingNames {
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 200%;
+    z-index: 2;
     font-size: 1.8rem;
-    color: var(--detail-color);
+    color: rgb(255, 239, 214);
     font-weight: 400;
     letter-spacing: 1px;
+    margin-top: -20%;
 }
 
-/* Imagen para mobile */
+.heroBackgroundDesingNames::after {
+    content: '';
+    position: absolute;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: 100%;
+    background-image: url('../../media/hero/bannerDeTexto.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    z-index: -1;
+}
+
+.confirmarAsistencia{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.flechaAbajoText {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: grey;
+}
+
+.flechaAbajoImg {
+    width: 22px;
+}
+
+/* Mobile */
 @media (max-width: 768px) {
     .heroBackgroundDesingMask {
-        background-image: url('../../media/hero/hero-mobile.jpg');
+        background-image: url('../../media/hero/hero-mobile.png');
     }
 
-    /* Texto en la esquina inferior derecha */
+    .heroImageFrame {
+        width: 80%;
+    }
+
+    .heroImageFrame::before,
+    .heroImageFrame::after {
+        width: 40px;
+        height: 40px;
+    }
+
     .heroBackgroundDesingNames {
         bottom: 5px;
         right: 5px;

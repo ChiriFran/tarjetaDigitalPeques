@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '../styles/AttendanceConfirmation.css';
-import iconConfirmacion from '../../media/icons/carta.webp';
 
 // Importar Firebase Firestore
 import { collection, addDoc, doc, updateDoc, increment, getDoc } from "firebase/firestore";
@@ -120,8 +119,6 @@ const AttendanceConfirmation = () => {
 
     return (
         <div className="attendanceConfirmationContainer">
-            <div className="icono-superior"><img src={iconConfirmacion} alt="confirmacion" /></div>
-            <h2>Confirmacion de asistencia</h2>
             <form className="form-container" onSubmit={handleSubmit}>
                 <label htmlFor="cantidad" className="label-cantidad">
                     ¿Cuántas personas asistirán?

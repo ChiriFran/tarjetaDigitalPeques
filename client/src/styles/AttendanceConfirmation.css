@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    background-color: #2e2e2e;
+    background-color: var(--bg-color);
 }
 
 .icono-superior {
@@ -12,18 +12,11 @@
     margin-top: 3rem;
 }
 
-.attendanceConfirmationContainer h2 {
-    font-size: 2rem;
-    font-weight: 400;
-    color: #eee;
-    padding: 1rem 0;
-}
-
 .form-container {
     max-width: 600px;
     margin: 30px auto;
     padding: 20px;
-    background-color: #eee;
+    background-color: var(--bg-color);
     font-family: Arial, sans-serif;
 }
 
@@ -65,7 +58,7 @@
 .boton-enviar {
     width: 100%;
     padding: 12px;
-    background-color: #2e2e2e;
+    background-color: #ffc183;
     color: #F8F4F0;
     font-size: 16px;
     font-weight: bold;
