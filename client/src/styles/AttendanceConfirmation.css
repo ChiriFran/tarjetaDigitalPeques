@@ -21,7 +21,7 @@
 }
 
 .label-cantidad {
-    font-size: 1.2rem;
+    font-size: 1rem;
     display: block;
     margin-bottom: 12px;
     font-weight: bold;
@@ -32,7 +32,7 @@
     width: 100%;
     padding: 8px;
     margin-bottom: 2rem;
-    font-size: 16px;
+    font-size: 0.8rem;
 }
 
 .tarjeta-persona {
@@ -44,6 +44,7 @@
     margin-top: 0;
     margin-bottom: 10px;
     color: #2e2e2e;
+    font-size: 1rem;
 }
 
 .tarjeta-persona input,
@@ -60,7 +61,7 @@
     padding: 12px;
     background-color: #ffc183;
     color: #F8F4F0;
-    font-size: 16px;
+    font-size: 0.8rem;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -89,7 +90,7 @@
 
 @media (max-width: 480px) {
     .attendanceConfirmationContainer h2 {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         padding: 0 1rem;
     }
 

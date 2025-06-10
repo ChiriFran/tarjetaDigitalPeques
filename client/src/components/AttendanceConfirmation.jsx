@@ -130,16 +130,19 @@ const AttendanceConfirmation = () => {
                     onChange={handleCantidadChange}
                     disabled={isSubmitting} // Opcional: deshabilitar select mientras envía
                 >
-                    {Array.from({ length: 10 }, (_, i) => (
-                        <option key={i} value={i + 1}>
-                            Persona {i + 1}
-                        </option>
-                    ))}
+                    {Array.from({ length: 10 }, (_, i) => {
+                        const cantidad = i + 1;
+                        const texto = cantidad === 1 ? '1 persona' : `${cantidad} personas`;
+                        return (
+                            <option key={cantidad} value={cantidad}>
+                                {texto}
+                            </option>
+                        );
+                    })}
                 </select>
-
                 {datos.map((persona, index) => (
                     <div key={index} className="tarjeta-persona">
-                        <h3>Persona {index + 1}</h3>
+                        <h3>Invitado {index + 1}</h3>
                         <input
                             type="text"
                             placeholder="Nombre"
