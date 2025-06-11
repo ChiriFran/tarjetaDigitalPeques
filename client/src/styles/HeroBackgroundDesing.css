@@ -133,8 +133,13 @@
 
 /* Mobile */
 @media (max-width: 768px) {
+    
     .heroBackgroundDesingMask {
         background-image: url('../../media/hero/hero-mobile.png');
+    }
+
+    .heroCenterImageWrapper {
+    width: 90%;
     }
 
     .heroImageFrame {
