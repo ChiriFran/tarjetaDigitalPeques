@@ -1,28 +1,17 @@
 import React, { useState } from 'react';
 import '../styles/AttendanceConfirmation.css';
-
-// Importar Firebase Firestore
 import { collection, addDoc, doc, updateDoc, increment, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 
-// Opciones alimentación
 const opcionesAlimentacion = [
-    'Ninguno',
-    'Vegetariano',
-    'Vegano',
-    'Celíaco',
-    'Diabético',
-    'Hipertenso',
-    'Intolerante a la lactosa',
-    'Otro',
+    'Ninguno', 'Vegetariano', 'Vegano', 'Celíaco',
+    'Diabético', 'Hipertenso', 'Intolerante a la lactosa', 'Otro',
 ];
 
-const AttendanceConfirmation = () => {
+const AttendanceConfirmation = ({ onClose }) => {
     const [cantidadPersonas, setCantidadPersonas] = useState(1);
-    const [datos, setDatos] = useState([
-        { nombre: '', apellido: '', alimentacion: 'Ninguno' },
-    ]);
-    const [isSubmitting, setIsSubmitting] = useState(false); // Estado para saber si está enviando
+    const [datos, setDatos] = useState([{ nombre: '', apellido: '', alimentacion: 'Ninguno' }]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleCantidadChange = (e) => {
         const nuevaCantidad = parseInt(e.target.value);
@@ -41,18 +30,10 @@ const AttendanceConfirmation = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formularioCompleto = datos.every(d => d.nombre.trim() && d.apellido.trim());
+        if (!formularioCompleto) return alert('Por favor completá todos los campos.');
 
-        const formularioCompleto = datos.every(
-            (d) => d.nombre.trim() !== '' && d.apellido.trim() !== ''
-        );
-
-        if (!formularioCompleto) {
-            alert('Por favor completá todos los campos.');
-            return;
-        }
-
-        setIsSubmitting(true); // Activo estado enviando
-
+        setIsSubmitting(true);
         try {
             const invitados = datos.map(({ nombre, apellido, alimentacion }) => ({
                 invitado: `${nombre.trim()} ${apellido.trim()}`,
@@ -61,38 +42,28 @@ const AttendanceConfirmation = () => {
 
             await addDoc(collection(db, "confirmados"), {
                 cantidad: cantidadPersonas,
-                invitados: invitados,
+                invitados,
                 fechaConfirmacion: new Date(),
             });
 
-            const cantidadDocRef = doc(db, "invitados", "cantidad");
-            await updateDoc(cantidadDocRef, {
-                total: increment(cantidadPersonas)
+            await updateDoc(doc(db, "invitados", "cantidad"), {
+                total: increment(cantidadPersonas),
             });
 
             const alimentacionDocRef = doc(db, "invitados", "alimentacion");
             const alimentacionDocSnap = await getDoc(alimentacionDocRef);
-            if (!alimentacionDocSnap.exists()) {
-                throw new Error("El documento 'invitados/alimentacion' no existe.");
-            }
+            if (!alimentacionDocSnap.exists()) throw new Error("No existe el doc 'alimentacion'");
 
             const alimentacionData = alimentacionDocSnap.data();
-
-            const mapAlimentacion = {
-                'Ninguno': 'ninguno',
-                'Vegetariano': 'vegetariano',
-                'Vegano': 'vegano',
-                'Celíaco': 'celiaco',
-                'Diabético': 'diabetico',
-                'Hipertenso': 'hipertenso',
-                'Intolerante a la lactosa': 'lactosa',
-                'Otro': null
+            const map = {
+                'Ninguno': 'ninguno', 'Vegetariano': 'vegetariano', 'Vegano': 'vegano',
+                'Celíaco': 'celiaco', 'Diabético': 'diabetico', 'Hipertenso': 'hipertenso',
+                'Intolerante a la lactosa': 'lactosa', 'Otro': null
             };
 
             const incrementos = {};
-
             datos.forEach(({ alimentacion }) => {
-                const key = mapAlimentacion[alimentacion];
+                const key = map[alimentacion];
                 if (key && key in alimentacionData) {
                     incrementos[key] = (incrementos[key] || 0) + 1;
                 }
@@ -101,89 +72,56 @@ const AttendanceConfirmation = () => {
             for (const key in incrementos) {
                 incrementos[key] = increment(incrementos[key]);
             }
-
             if (Object.keys(incrementos).length > 0) {
                 await updateDoc(alimentacionDocRef, incrementos);
             }
 
-            alert('Asistencia confirmada y guardada. ¡Gracias!');
+            alert('Asistencia confirmada. ¡Gracias!');
             setCantidadPersonas(1);
             setDatos([{ nombre: '', apellido: '', alimentacion: 'Ninguno' }]);
-        } catch (error) {
-            console.error("Error al guardar o actualizar en Firestore:", error);
-            alert('Hubo un error al guardar los datos. Por favor, intentá nuevamente.');
+            onClose(); // Cierra el modal al enviar
+        } catch (err) {
+            console.error("Error:", err);
+            alert('Error al guardar. Reintentá.');
         }
-
-        setIsSubmitting(false); // Desactivo estado enviando
+        setIsSubmitting(false);
     };
 
     return (
-        <div className="attendanceConfirmationContainer">
-            <form className="form-container" onSubmit={handleSubmit}>
-                <label htmlFor="cantidad" className="label-cantidad">
-                    ¿Cuántas personas asistirán?
-                </label>
-                <select
-                    id="cantidad"
-                    className="select-cantidad"
-                    value={cantidadPersonas}
-                    onChange={handleCantidadChange}
-                    disabled={isSubmitting} // Opcional: deshabilitar select mientras envía
-                >
-                    {Array.from({ length: 10 }, (_, i) => {
-                        const cantidad = i + 1;
-                        const texto = cantidad === 1 ? '1 persona' : `${cantidad} personas`;
-                        return (
-                            <option key={cantidad} value={cantidad}>
-                                {texto}
-                            </option>
-                        );
-                    })}
-                </select>
-                {datos.map((persona, index) => (
-                    <div key={index} className="tarjeta-persona">
-                        <h3>Invitado {index + 1}</h3>
-                        <input
-                            type="text"
-                            placeholder="Nombre"
-                            value={persona.nombre}
-                            onChange={(e) => handleChange(index, 'nombre', e.target.value)}
-                            required
-                            disabled={isSubmitting} // Deshabilitar input mientras envía
-                        />
-                        <input
-                            type="text"
-                            placeholder="Apellido"
-                            value={persona.apellido}
-                            onChange={(e) => handleChange(index, 'apellido', e.target.value)}
-                            required
-                            disabled={isSubmitting}
-                        />
-                        <label className='restriccionAlimentariaTitle'>Restricción alimentaria:</label>
-                        <select
-                            value={persona.alimentacion}
-                            onChange={(e) => handleChange(index, 'alimentacion', e.target.value)}
-                            disabled={isSubmitting}
-                        >
-                            {opcionesAlimentacion.map((op, i) => (
-                                <option key={i} value={op}>
-                                    {op}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                ))}
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <button onClick={onClose} className="modal-close">×</button>
+                <form className="form-container" onSubmit={handleSubmit}>
+                    <label className="label-cantidad">¿Cuántas personas asistirán?</label>
+                    <select value={cantidadPersonas} onChange={handleCantidadChange} disabled={isSubmitting} className="select-cantidad">
+                        {Array.from({ length: 10 }, (_, i) => (
+                            <option key={i + 1} value={i + 1}>{i + 1} persona{s(i + 1)}</option>
+                        ))}
+                    </select>
 
-                <button
-                    type="submit"
-                    className="boton-enviar"
-                    disabled={isSubmitting} // Deshabilitar botón mientras envía
-                >
-                    {isSubmitting ? "Enviando..." : "Enviar"}
-                </button>
-            </form>
+                    {datos.map((persona, index) => (
+                        <div key={index} className="tarjeta-persona">
+                            <h3>Invitado {index + 1}</h3>
+                            <input type="text" placeholder="Nombre" value={persona.nombre} onChange={e => handleChange(index, 'nombre', e.target.value)} required disabled={isSubmitting} />
+                            <input type="text" placeholder="Apellido" value={persona.apellido} onChange={e => handleChange(index, 'apellido', e.target.value)} required disabled={isSubmitting} />
+                            <label className="restriccionAlimentariaTitle">Restricción alimentaria:</label>
+                            <select value={persona.alimentacion} onChange={e => handleChange(index, 'alimentacion', e.target.value)} disabled={isSubmitting}>
+                                {opcionesAlimentacion.map((op, i) => (
+                                    <option key={i} value={op}>{op}</option>
+                                ))}
+                            </select>
+                        </div>
+                    ))}
+
+                    <button type="submit" className="boton-enviar" disabled={isSubmitting}>
+                        {isSubmitting ? 'Enviando...' : 'Enviar'}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };
+
+const s = (n) => n > 1 ? 's' : '';
 
 export default AttendanceConfirmation;

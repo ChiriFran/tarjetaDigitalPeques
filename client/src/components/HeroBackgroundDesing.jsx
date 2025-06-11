@@ -21,11 +21,6 @@ function HeroBackgroundDesing() {
           <p className='fecha'>16 Junio 2025</p>
           <p className='direccion'>San Martin 123 Barrio Oeste</p>
         </div>
-
-        <div className="confirmarAsistencia">
-          <span className='flechaAbajoText'>¡Confirma tu asistencia!</span>
-          <img className='flechaAbajoImg' src="../../media/icons/flecha-abajo.webp" alt="confirmacion abajo" />
-        </div>
       </div>
     </div>
   );

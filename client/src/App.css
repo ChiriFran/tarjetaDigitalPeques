@@ -1,0 +1,30 @@
+.attendance-button-container{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 2rem 0;
+}
+
+/* Botón fijo en la esquina inferior izquierda */
+.attendance-button {
+    padding: 12px 20px;
+    background-color: #ffc183;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: 0.3s;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.attendance-button:hover {
+    background-color: #ffae4f;
+    text-decoration: underline;
+}

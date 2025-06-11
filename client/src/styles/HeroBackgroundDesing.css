@@ -31,7 +31,7 @@
     display: flex;
     flex-flow: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 /* Marco de la imagen (donde se aplican decorativos) */
@@ -43,7 +43,6 @@
     align-items: center;
     justify-content: center;
     border: 8px solid #e29667;
-    margin-top: 10%;
 }
 
 /* Decorativos en esquinas */
@@ -95,7 +94,6 @@
     color: rgb(255, 239, 214);
     font-weight: 400;
     letter-spacing: 1px;
-    margin-top: -20%;
 }
 
 .heroBackgroundDesingNames::after {
