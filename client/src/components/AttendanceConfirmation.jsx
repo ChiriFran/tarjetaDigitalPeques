@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/AttendanceConfirmation.css';
 import { collection, addDoc, doc, updateDoc, increment, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
@@ -12,6 +12,9 @@ const AttendanceConfirmation = ({ onClose }) => {
     const [cantidadPersonas, setCantidadPersonas] = useState(1);
     const [datos, setDatos] = useState([{ nombre: '', apellido: '', alimentacion: 'Ninguno' }]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [mensaje, setMensaje] = useState('');
+    const [mostrarMensaje, setMostrarMensaje] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
 
     const handleCantidadChange = (e) => {
         const nuevaCantidad = parseInt(e.target.value);
@@ -76,10 +79,9 @@ const AttendanceConfirmation = ({ onClose }) => {
                 await updateDoc(alimentacionDocRef, incrementos);
             }
 
-            alert('Asistencia confirmada. ¡Gracias!');
-            setCantidadPersonas(1);
-            setDatos([{ nombre: '', apellido: '', alimentacion: 'Ninguno' }]);
-            onClose(); // Cierra el modal al enviar
+            localStorage.setItem('confirmado', 'true');
+            setMensaje('Asistencia confirmada. ¡Gracias!');
+            setMostrarMensaje(true);
         } catch (err) {
             console.error("Error:", err);
             alert('Error al guardar. Reintentá.');
@@ -87,38 +89,75 @@ const AttendanceConfirmation = ({ onClose }) => {
         setIsSubmitting(false);
     };
 
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <button onClick={onClose} className="modal-close">×</button>
-                <form className="form-container" onSubmit={handleSubmit}>
-                    <label className="label-cantidad">¿Cuántas personas asistirán?</label>
-                    <select value={cantidadPersonas} onChange={handleCantidadChange} disabled={isSubmitting} className="select-cantidad">
-                        {Array.from({ length: 10 }, (_, i) => (
-                            <option key={i + 1} value={i + 1}>{i + 1} persona{s(i + 1)}</option>
-                        ))}
-                    </select>
+    const cerrarModal = () => {
+        setIsVisible(false);
+        setTimeout(onClose, 400); // esperar animación
+    };
 
-                    {datos.map((persona, index) => (
-                        <div key={index} className="tarjeta-persona">
-                            <h3>Invitado {index + 1}</h3>
-                            <input type="text" placeholder="Nombre" value={persona.nombre} onChange={e => handleChange(index, 'nombre', e.target.value)} required disabled={isSubmitting} />
-                            <input type="text" placeholder="Apellido" value={persona.apellido} onChange={e => handleChange(index, 'apellido', e.target.value)} required disabled={isSubmitting} />
-                            <label className="restriccionAlimentariaTitle">Restricción alimentaria:</label>
-                            <select value={persona.alimentacion} onChange={e => handleChange(index, 'alimentacion', e.target.value)} disabled={isSubmitting}>
-                                {opcionesAlimentacion.map((op, i) => (
-                                    <option key={i} value={op}>{op}</option>
+    const cerrarMensaje = () => {
+        setIsVisible(false);
+        setTimeout(() => {
+            setMostrarMensaje(false);
+            onClose();
+        }, 400);
+    };
+
+    if (localStorage.getItem('confirmado')) {
+        return (
+            <div className={`modal-overlay ${isVisible ? 'fade-in' : 'fade-out'}`}>
+                <div className={`modal-content ${isVisible ? 'slide-up' : 'slide-down'}`}>
+                    <p>Ya confirmaste tu asistencia. ¡Gracias!</p>
+                    <button onClick={cerrarModal} className="boton-enviar">Cerrar</button>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            {mostrarMensaje && (
+                <div className={`mensaje-overlay ${isVisible ? 'fade-in' : 'fade-out'}`}>
+                    <div className={`mensaje-contenido ${isVisible ? 'slide-up' : 'slide-down'}`}>
+                        <p>{mensaje}</p>
+                        <button onClick={cerrarMensaje}>Cerrar</button>
+                    </div>
+                </div>
+            )}
+
+            {!mostrarMensaje && (
+                <div className={`modal-overlay ${isVisible ? 'fade-in' : 'fade-out'}`}>
+                    <div className={`modal-content ${isVisible ? 'slide-up' : 'slide-down'}`}>
+                        <button onClick={cerrarModal} className="modal-close">×</button>
+                        <form className="form-container" onSubmit={handleSubmit}>
+                            <label className="label-cantidad">¿Cuántas personas asistirán?</label>
+                            <select value={cantidadPersonas} onChange={handleCantidadChange} disabled={isSubmitting} className="select-cantidad">
+                                {Array.from({ length: 10 }, (_, i) => (
+                                    <option key={i + 1} value={i + 1}>{i + 1} persona{s(i + 1)}</option>
                                 ))}
                             </select>
-                        </div>
-                    ))}
 
-                    <button type="submit" className="boton-enviar" disabled={isSubmitting}>
-                        {isSubmitting ? 'Enviando...' : 'Enviar'}
-                    </button>
-                </form>
-            </div>
-        </div>
+                            {datos.map((persona, index) => (
+                                <div key={index} className="tarjeta-persona">
+                                    <h3>Invitado {index + 1}</h3>
+                                    <input type="text" placeholder="Nombre" value={persona.nombre} onChange={e => handleChange(index, 'nombre', e.target.value)} required disabled={isSubmitting} />
+                                    <input type="text" placeholder="Apellido" value={persona.apellido} onChange={e => handleChange(index, 'apellido', e.target.value)} required disabled={isSubmitting} />
+                                    <label className="restriccionAlimentariaTitle">Restricción alimentaria:</label>
+                                    <select value={persona.alimentacion} onChange={e => handleChange(index, 'alimentacion', e.target.value)} disabled={isSubmitting}>
+                                        {opcionesAlimentacion.map((op, i) => (
+                                            <option key={i} value={op}>{op}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            ))}
+
+                            <button type="submit" className="boton-enviar" disabled={isSubmitting}>
+                                {isSubmitting ? 'Enviando...' : 'Enviar'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 

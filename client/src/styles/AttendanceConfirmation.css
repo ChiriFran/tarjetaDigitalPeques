@@ -9,6 +9,8 @@
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
 
 .modal-content {
@@ -28,7 +30,7 @@
     right: 12px;
     background: transparent;
     border: none;
-    font-size: 1.8rem;
+    font-size: 2.5rem;
     cursor: pointer;
     color: #444;
 }
@@ -123,17 +125,145 @@
     color: #454545;
 }
 
+/* Animaciones */
+.modal-overlay {
+    animation: fadeIn 0.3s ease forwards;
+    opacity: 0;
+}
+
+.modal-content {
+    animation: slideUp 0.4s ease forwards;
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal de confirmación */
+.mensaje-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    /* el blur que buscás */
+}
+
+.mensaje-contenido {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.mensaje-contenido button {
+    margin-top: 1rem;
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Entrada */
+.fade-in {
+    animation: fadeIn 0.4s forwards;
+}
+
+.slide-up {
+    animation: slideUp 0.4s forwards;
+}
+
+/* Salida */
+.fade-out {
+    animation: fadeOut 0.4s forwards;
+}
+
+.slide-down {
+    animation: slideDown 0.4s forwards;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+}
+
+
+
 @media (max-width: 480px) {
+
+    .modal-content {
+        padding: 3rem 0;
+    }
+
     .attendanceConfirmationContainer h2 {
         font-size: 1.2rem;
         padding: 0 1rem;
     }
 
-    .label-cantidad {
-        font-size: 1rem;
+    .form-container {
+        margin: 0 0;
     }
 
-    .form-container {
-        margin: 30px 15px;
+    .label-cantidad {
+        font-size: 1rem;
     }
 }
